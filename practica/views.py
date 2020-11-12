@@ -9,13 +9,30 @@ from practica.serializers import *
 from rest_framework.decorators import api_view
 from datetime import datetime
 import json
+from dateutil.relativedelta import relativedelta
+
 
 @api_view(['GET', 'POST'])
 def getUsuarios(request):
     if request.method == 'GET':
-        usuarios = Usuario.objects.all()
-        usuarios_serializer = UsuarioSerializer(usuarios, many=True)
-        return JsonResponse(usuarios_serializer.data, safe=False, status=status.HTTP_200_OK)
+        if request.GET.get('mayores') == "False":
+            fecha_minima = datetime.now() - relativedelta(years=18)
+            usuarios = Usuario.objects.filter(
+                fecha_nacimiento__gte=fecha_minima)
+            usuarios_serializer = UsuarioSerializer(usuarios, many=True)
+            return JsonResponse(usuarios_serializer.data, safe=False, status=status.HTTP_200_OK)
+
+        elif request.GET.get('mayores') == "True":
+            fecha_minima = datetime.now() - relativedelta(years=18)
+            usuarios = Usuario.objects.filter(
+                fecha_nacimiento__lte=fecha_minima)
+            usuarios_serializer = UsuarioSerializer(usuarios, many=True)
+            return JsonResponse(usuarios_serializer.data, safe=False, status=status.HTTP_200_OK)
+
+        else:
+            usuarios = Usuario.objects.all()
+            usuarios_serializer = UsuarioSerializer(usuarios, many=True)
+            return JsonResponse(usuarios_serializer.data, safe=False, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
         usuario_data = JSONParser().parse(request)
