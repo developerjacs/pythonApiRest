@@ -42,3 +42,6 @@ def getUsuarios(request):
             usuarios_serializer.save()
             return JsonResponse(usuarios_serializer.data, status=status.HTTP_201_CREATED)
         return JsonResponse(usuarios_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Funciones de romolo
