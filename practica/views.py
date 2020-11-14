@@ -44,4 +44,7 @@ def getUsuarios(request):
         return JsonResponse(usuarios_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# Funciones de romolo
+# Funciones de Romolo
+@api_view(['GET', 'UPDATE', 'DELETE'])
+def comentarios_publicacion(request, idUsuario, idPublicacion):
+    pass
