@@ -46,5 +46,10 @@ def getUsuarios(request):
 
 # Funciones de Romolo
 @api_view(['GET', 'UPDATE', 'DELETE'])
-def comentarios_publicacion(request, idUsuario, idPublicacion):
-    pass
+def comentarios_publicacion(request, pk):
+    if request.method == 'GET':
+        comentarios = Comentario.objects(publicacion__pk=pk)
+        serializados = ComentarioSerializer(comentarios)
+        return JsonResponse(serializados.data, safe=False, status=status.HTTP_200_OK)
+    elif request.methos == 'POST':
+        pass
