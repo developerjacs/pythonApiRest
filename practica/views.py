@@ -68,18 +68,6 @@ def comentarios_publicacion(request, pk):
         return JsonResponse(serializado.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# UPS CREO QUE ESTE METODO NO TENIA QUE HACERLO 😅
-@api_view(['GET', 'PUT', 'DELETE'])
-def coment(request, pk):
-    if request.method == 'GET':
-        try:
-            com = Comentario.objects.get(pk=pk)
-        except Comentario.DoesNotExist:
-            return JsonResponse({'message': 'Requested comment does not exist'}, status=status.HTTP_404_NOT_FOUND)
-        com_serializer = ComentarioSerializer(com)
-        return JsonResponse(com_serializer, status=status.HTTP_200_OK)
-
-
 @api_view(['GET', 'POST'])
 def publicaciones(request):
     if request.method == 'GET':
