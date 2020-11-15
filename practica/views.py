@@ -49,9 +49,7 @@ def getUsuarios(request):
 def comentarios_publicacion(request, pk):
     if request.method == 'GET':
         try:
-            comentarios = Comentario.objects.filter(
-                publicacion=int(pk, 16)
-            )
+            comentarios = Comentario.objects.filter(publicacion=pk)
         except Comentario.DoesNotExist:
             return JsonResponse({'message': 'Publicacion with specified id does not exist'}, status=status.HTTP_204_NO_CONTENT)
         serializados = ComentarioSerializer(comentarios, many=True)
