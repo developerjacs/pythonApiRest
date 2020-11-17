@@ -1,0 +1,14 @@
+Pasos de instalación:
+-Se necesitan hacer las siguientes instalaciones:
+Instalar MongoDB + Python y hacer los siguientes pip:
+pip install djangorestframework
+pip install djongo
+pip install django-cors-headers
+pip install requests
+pip install python-dateutil
+
+-Para cargar nuestro modelo en la base de datos:
+python manage.py migrate tutorials
+
+-Para ejecutar el servidor:
+python manage.py runserver 8080
