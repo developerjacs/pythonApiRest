@@ -146,4 +146,81 @@ def publicaciones(request):
             publicacion_serializada.save()
             return JsonResponse(publicacion_serializada.data, status=status.HTTP_201_CREATED)
         return JsonResponse(publicacion_serializada.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET'])
+def getPOIEspaciosAlt(request):
+    if request.method == 'GET':
+        url = 'https://datosabiertos.malaga.eu/api/3/action/datastore_search?resource_id=c9c73aca-26e9-4f89-b7c6-59db49346243' 
+        fileobj = urllib.request.urlopen(url)
+        varb = fileobj.read()
+        varnb = varb.decode('UTF-8')
 
+        array1 = [idx for idx, x in enumerate(varnb) if x=='[']
+        array2 = [idx for idx, x in enumerate(varnb) if x==']']
+        objetos = varnb[array1[1]:array2[1]+1] 
+        return (JsonResponse(objetos,safe=False, status= requests.get(url).status_code))
+
+
+@api_view(['GET'])
+def getPOIbyTitleEspaciosAlt(request, title):
+    if request.method == 'GET':
+        url = 'https://datosabiertos.malaga.eu/api/3/action/datastore_search?resource_id=c9c73aca-26e9-4f89-b7c6-59db49346243&limit=5&filters=%7B%22NOMBRE%22:%22'+ urllib.parse.quote(title) +'%22}' 
+        fileobj = urllib.request.urlopen(url)
+        varb = fileobj.read()
+        varnb = varb.decode('UTF-8')
+
+        array1 = [idx for idx, x in enumerate(varnb) if x=='[']
+        array2 = [idx for idx, x in enumerate(varnb) if x==']']
+        objetos = varnb[array1[1]:array2[1]+1] 
+        return (JsonResponse(objetos,safe=False, status= requests.get(url).status_code))
+
+@api_view(['GET'])
+def getPOIbyIdEspaciosAlt(request, id):
+    if request.method == 'GET':
+        url = 'https://datosabiertos.malaga.eu/api/3/action/datastore_search?resource_id=c9c73aca-26e9-4f89-b7c6-59db49346243&limit=5&filters=%7B%22ID%22:%22'+ urllib.parse.quote(id) +'%22}'  #Id es un int 4
+        fileobj = urllib.request.urlopen(url)
+        varb = fileobj.read()
+        varnb = varb.decode('UTF-8')
+
+        array1 = [idx for idx, x in enumerate(varnb) if x=='[']
+        array2 = [idx for idx, x in enumerate(varnb) if x==']']
+        objetos = varnb[array1[1]:array2[1]+1] 
+        return (JsonResponse(objetos,safe=False, status= requests.get(url).status_code))
+
+@api_view(['GET'])
+def getPOICentrosCulturales(request):
+    if request.method == 'GET':
+        url = 'https://datosabiertos.malaga.eu/api/3/action/datastore_search?resource_id=7e0ae247-36ab-4dd5-8df2-f0392289441f' 
+        fileobj = urllib.request.urlopen(url)
+        varb = fileobj.read()
+        varnb = varb.decode('UTF-8')
+
+        array1 = [idx for idx, x in enumerate(varnb) if x=='[']
+        array2 = [idx for idx, x in enumerate(varnb) if x==']']
+        objetos = varnb[array1[1]:array2[1]+1] 
+        return (JsonResponse(objetos,safe=False, status= requests.get(url).status_code))
+@api_view(['GET'])
+def getPOIbyTitleCentrosCulturales(request, title):
+    if request.method == 'GET':
+        url = 'https://datosabiertos.malaga.eu/api/3/action/datastore_search?resource_id=7e0ae247-36ab-4dd5-8df2-f0392289441f&limit=5&filters=%7B%22NOMBRE%22:%22'+ urllib.parse.quote(title) +'%22}'
+        fileobj = urllib.request.urlopen(url)
+        varb = fileobj.read()
+        varnb = varb.decode('UTF-8')
+
+        array1 = [idx for idx, x in enumerate(varnb) if x=='[']
+        array2 = [idx for idx, x in enumerate(varnb) if x==']']
+        objetos = varnb[array1[1]:array2[1]+1]
+        return (JsonResponse(objetos,safe=False, status= requests.get(url).status_code))
+
+@api_view(['GET'])
+def getPOIbyIdCentrosCulturales(request, id):
+    if request.method == 'GET':
+        url = 'https://datosabiertos.malaga.eu/api/3/action/datastore_search?resource_id=7e0ae247-36ab-4dd5-8df2-f0392289441f&limit=5&filters=%7B%22ID%22:%22'+ urllib.parse.quote(id) +'%22}'
+        fileobj = urllib.request.urlopen(url)
+        varb = fileobj.read()
+        varnb = varb.decode('UTF-8')
+
+        array1 = [idx for idx, x in enumerate(varnb) if x=='[']
+        array2 = [idx for idx, x in enumerate(varnb) if x==']']
+        objetos = varnb[array1[1]:array2[1]+1]
+        return (JsonResponse(objetos,safe=False, status= requests.get(url).status_code))
