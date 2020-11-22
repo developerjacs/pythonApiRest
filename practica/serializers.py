@@ -5,7 +5,8 @@ from practica.models import *
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
-        fields = ('nombre',
+        fields = ('id',
+                  'nombre',
                   'apellido1',
                   'apellido2', 
                   'nombre_usuario',
@@ -17,7 +18,8 @@ class UsuarioSerializer(serializers.ModelSerializer):
 class PublicacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Publicacion 
-        fields = ('nombre',
+        fields = ('id',
+                  'nombre',
                   'descripcion',
                   'graffiti',
                   'fecha',
@@ -29,7 +31,8 @@ class PublicacionSerializer(serializers.ModelSerializer):
 class ComentarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comentario
-        fields = ('mensaje',
+        fields = ('id',
+                  'mensaje',
                   'fecha',
                   'publicacion',
                   'publicador')
