@@ -10,10 +10,10 @@ from rest_framework.decorators import api_view
 from datetime import datetime
 import json
 from dateutil.relativedelta import relativedelta
-import requests
-# import urllib.request
-# import urllib.response
 
+import urllib.request
+import urllib.response
+import requests
 
 @api_view(['GET', 'POST'])
 def getUsuarios(request):
@@ -150,111 +150,80 @@ def publicaciones(request):
             return JsonResponse(publicacion_serializada.data, status=status.HTTP_201_CREATED)
         return JsonResponse(publicacion_serializada.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Funciones de Noel
-@api_view(['GET', 'POST'])
-def getComentarios(request):
-    if request.method == 'GET':
-        comentarios = Comentario.objects.all()
-        comentarios_serializer = ComentarioSerializer(comentarios, many=True)
-        return JsonResponse(comentarios_serializer.data, safe=False, status=status.HTTP_200_OK)
-
-    elif request.method == 'POST':
-        comentario_data = JSONParser().parse(request)
-        comentario_data["fecha"] = datetime.today().strftime('%Y-%m-%dT%H:%M:%S')
-        comentarios_serializer = ComentarioSerializer(data=comentario_data)
-        if comentarios_serializer.is_valid():
-            comentarios_serializer.save()
-            return JsonResponse(comentarios_serializer.data, status=status.HTTP_201_CREATED)
-        return JsonResponse(comentarios_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['GET', 'PUT', 'DELETE'])
-def getComentariosID(request, pk):
-    try:
-        comentario = Comentario.objects.get(pk=pk)
-    except Comentario.DoesNotExist:
-        return JsonResponse({'message': 'The comentario does not exist'}, status=status.HTTP_404_NOT_FOUND)
-    if request.method == 'GET':
-        comentario_serializer = ComentarioSerializer(comentario)
-        return JsonResponse(comentario_serializer.data)
-    elif request.method == 'PUT':
-        comentario_data = JSONParser().parse(request)
-        comentario_serializer = ComentarioSerializer(
-            comentario, data=comentario_data)
-        if comentario_serializer.is_valid():
-            comentario_serializer.save()
-            return JsonResponse(comentario_serializer.data)
-        return JsonResponse(comentario_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == 'DELETE':
-        comentario.delete()
-        return JsonResponse({'message': 'Comentario was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
-
-@api_view(['GET', 'PUT', 'DELETE'])
-def getPublicacionesID(request, pk):
-    try:
-        publicacion = Publicacion.objects.get(pk=pk)
-    except Publicacion.DoesNotExist:
-        return JsonResponse({'message': 'The publicacion does not exist'}, status=status.HTTP_404_NOT_FOUND)
-    if request.method == 'GET':
-        publicacion_serializer = PublicacionSerializer(publicacion)
-        return JsonResponse(publicacion_serializer.data)
-    elif request.method == 'PUT':
-        publicacion_data = JSONParser().parse(request)
-        publicacion_serializer = PublicacionSerializer(
-            publicacion, data=publicacion_data)
-        if publicacion_serializer.is_valid():
-            publicacion_serializer.save()
-            return JsonResponse(publicacion_serializer.data)
-        return JsonResponse(publicacion_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == 'DELETE':
-        publicacion.delete()
-        return JsonResponse({'message': 'Publicacion was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
-
-# Funciones de German 
 @api_view(['GET'])
 def getPOIEspaciosAlt(request):
     if request.method == 'GET':
-        url = 'https://datosabiertos.malaga.eu/api/3/action/datastore_search?resource_id=c9c73aca-26e9-4f89-b7c6-59db49346243'
-        resultado = requests.get(url)
+        url = 'https://datosabiertos.malaga.eu/api/3/action/datastore_search?resource_id=c9c73aca-26e9-4f89-b7c6-59db49346243' 
+        fileobj = urllib.request.urlopen(url)
+        varb = fileobj.read()
+        varnb = varb.decode('UTF-8')
 
-        return (JsonResponse(resultado.json(),safe=False, status= requests.get(url).status_code))
+        array1 = [idx for idx, x in enumerate(varnb) if x=='[']
+        array2 = [idx for idx, x in enumerate(varnb) if x==']']
+        objetos = varnb[array1[1]:array2[1]+1] 
+        return (JsonResponse(objetos,safe=False, status= requests.get(url).status_code))
 
 
 @api_view(['GET'])
 def getPOIbyTitleEspaciosAlt(request, title):
     if request.method == 'GET':
-        url = 'https://datosabiertos.malaga.eu/api/3/action/datastore_search?resource_id=c9c73aca-26e9-4f89-b7c6-59db49346243&limit=5&filters=%7B%22NOMBRE%22:%22'+ title +'%22}'
+        url = 'https://datosabiertos.malaga.eu/api/3/action/datastore_search?resource_id=c9c73aca-26e9-4f89-b7c6-59db49346243&limit=5&filters=%7B%22NOMBRE%22:%22'+ urllib.parse.quote(title) +'%22}' 
+        fileobj = urllib.request.urlopen(url)
+        varb = fileobj.read()
+        varnb = varb.decode('UTF-8')
 
-        resultado = requests.get(url)
-
-        return (JsonResponse(resultado.json(),safe=False, status= requests.get(url).status_code))
+        array1 = [idx for idx, x in enumerate(varnb) if x=='[']
+        array2 = [idx for idx, x in enumerate(varnb) if x==']']
+        objetos = varnb[array1[1]:array2[1]+1] 
+        return (JsonResponse(objetos,safe=False, status= requests.get(url).status_code))
 
 @api_view(['GET'])
 def getPOIbyIdEspaciosAlt(request, id):
     if request.method == 'GET':
-        url = 'https://datosabiertos.malaga.eu/api/3/action/datastore_search?resource_id=c9c73aca-26e9-4f89-b7c6-59db49346243&limit=5&filters=%7B%22ID%22:%22'+ id +'%22}'  #Id es un int 4
-        resultado = requests.get(url)
+        url = 'https://datosabiertos.malaga.eu/api/3/action/datastore_search?resource_id=c9c73aca-26e9-4f89-b7c6-59db49346243&limit=5&filters=%7B%22ID%22:%22'+ urllib.parse.quote(id) +'%22}'  #Id es un int 4
+        fileobj = urllib.request.urlopen(url)
+        varb = fileobj.read()
+        varnb = varb.decode('UTF-8')
 
-        return (JsonResponse(resultado.json(), safe=False, status=requests.get(url).status_code))
+        array1 = [idx for idx, x in enumerate(varnb) if x=='[']
+        array2 = [idx for idx, x in enumerate(varnb) if x==']']
+        objetos = varnb[array1[1]:array2[1]+1] 
+        return (JsonResponse(objetos,safe=False, status= requests.get(url).status_code))
 
 @api_view(['GET'])
 def getPOICentrosCulturales(request):
     if request.method == 'GET':
-        url = 'https://datosabiertos.malaga.eu/api/3/action/datastore_search?resource_id=7e0ae247-36ab-4dd5-8df2-f0392289441f'
-        resultado = requests.get(url)
+        url = 'https://datosabiertos.malaga.eu/api/3/action/datastore_search?resource_id=7e0ae247-36ab-4dd5-8df2-f0392289441f' 
+        fileobj = urllib.request.urlopen(url)
+        varb = fileobj.read()
+        varnb = varb.decode('UTF-8')
 
-        return (JsonResponse(resultado.json(), safe=False, status=requests.get(url).status_code))
+        array1 = [idx for idx, x in enumerate(varnb) if x=='[']
+        array2 = [idx for idx, x in enumerate(varnb) if x==']']
+        objetos = varnb[array1[1]:array2[1]+1] 
+        return (JsonResponse(objetos,safe=False, status= requests.get(url).status_code))
 @api_view(['GET'])
 def getPOIbyTitleCentrosCulturales(request, title):
     if request.method == 'GET':
-        url = 'https://datosabiertos.malaga.eu/api/3/action/datastore_search?resource_id=7e0ae247-36ab-4dd5-8df2-f0392289441f&limit=5&filters=%7B%22NOMBRE%22:%22'+ title +'%22}'
-        resultado = requests.get(url)
+        url = 'https://datosabiertos.malaga.eu/api/3/action/datastore_search?resource_id=7e0ae247-36ab-4dd5-8df2-f0392289441f&limit=5&filters=%7B%22NOMBRE%22:%22'+ urllib.parse.quote(title) +'%22}'
+        fileobj = urllib.request.urlopen(url)
+        varb = fileobj.read()
+        varnb = varb.decode('UTF-8')
 
-        return (JsonResponse(resultado.json(), safe=False, status=requests.get(url).status_code))
+        array1 = [idx for idx, x in enumerate(varnb) if x=='[']
+        array2 = [idx for idx, x in enumerate(varnb) if x==']']
+        objetos = varnb[array1[1]:array2[1]+1]
+        return (JsonResponse(objetos,safe=False, status= requests.get(url).status_code))
 
 @api_view(['GET'])
 def getPOIbyIdCentrosCulturales(request, id):
     if request.method == 'GET':
-        url = 'https://datosabiertos.malaga.eu/api/3/action/datastore_search?resource_id=7e0ae247-36ab-4dd5-8df2-f0392289441f&limit=5&filters=%7B%22ID%22:%22'+ id +'%22}'
-        resultado = requests.get(url)
+        url = 'https://datosabiertos.malaga.eu/api/3/action/datastore_search?resource_id=7e0ae247-36ab-4dd5-8df2-f0392289441f&limit=5&filters=%7B%22ID%22:%22'+ urllib.parse.quote(id) +'%22}'
+        fileobj = urllib.request.urlopen(url)
+        varb = fileobj.read()
+        varnb = varb.decode('UTF-8')
 
-        return (JsonResponse(resultado.json(), safe=False, status=requests.get(url).status_code))
+        array1 = [idx for idx, x in enumerate(varnb) if x=='[']
+        array2 = [idx for idx, x in enumerate(varnb) if x==']']
+        objetos = varnb[array1[1]:array2[1]+1]
+        return (JsonResponse(objetos,safe=False, status= requests.get(url).status_code))

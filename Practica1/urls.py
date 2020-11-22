@@ -21,4 +21,5 @@ from practica import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('practica.urls')),
+    path('', include('practica2.urls')),
 ]

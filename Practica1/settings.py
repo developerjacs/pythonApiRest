@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'practica.apps.PracticaConfig',
     # CORS
     'corsheaders',
+    'practica2.apps.Practica2Config',
 ]
 
 MIDDLEWARE = [
@@ -63,7 +64,7 @@ ROOT_URLCONF = 'Practica1.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR + '/practica2/html'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
