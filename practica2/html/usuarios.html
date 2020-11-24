@@ -181,10 +181,8 @@
                     data : new FormData(this),
                     processData : false,
                     contentType : false,
-                    success : function(response){
-                        Location.reload();
-                    },
                 });
+                Location.reload();
 
                 return false
             });
