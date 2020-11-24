@@ -3,6 +3,10 @@
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <!--JQUERY-->
+    {% load static %}
+    <script type="text/javascript" src="{% static "jquery-3.5.1.min.js" %}">
+    </script>
 </head>
 
 <body>
@@ -133,7 +137,8 @@
         </div>
         <div class="card-body">
             <div class="form-group">
-                <form method="post" action="http://localhost:8080/api/usuarios">
+                <form method="post" id="modificarUsuario" data-post-url="http://localhost:8080/api/usuarios">
+                    {%csrf_token%}
                     <div class="form-group row">
                         <label for="nombre_usuario" class="col-sm-2 col-form-label">Nombre de Usuario</label>
                         <input id="nombre_usuario" type="text" name="nombre_usuario" value="{{user.nombre_usuario}}" />
@@ -159,11 +164,33 @@
                         <label for="fecha_registro" class="col-sm-2 col-form-label">Fecha de Registro</label>
                         <input id="fecha_registro" type="text" name="fecha_registro" value="{{user.fecha_registro}}" />
                     </div>
-                    <input class="btn btn-primary" type="submit" type="button" name="Submit" value="Crear">
+                    <input class="btn btn-primary" type="submit" type="button" name="Submit" value="Crear" />
             </div>
         </div>
     </div>
 
+    {% block js %}
+    <script>
+        $(function(){
+            'use strict';
+            $('#modificarUsuario').on('submit', function(){
+                console.log("pulsado");
+                $.ajax({
+                    url : $('#modificarUsuario').data('post-url'),
+                    type : 'POST',
+                    data : new FormData(this),
+                    processData : false,
+                    contentType : false,
+                    success : function(response){
+                        Location.reload();
+                    },
+                });
+
+                return false
+            });
+        });
+    </script>
+    {% endblock %}
 
 
 </body>
