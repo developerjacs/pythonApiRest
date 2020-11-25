@@ -117,12 +117,32 @@
                         </form>
                     </td>
                     <td>
-                        <form method="POST" action="http://localhost:8080/api/usuarios/{{x.id}}">
+                        <form method="POST" id="eliminarUsuario-{{x.id}}" action="http://localhost:8080/api/usuarios/{{x.id}}">
+                        {%csrf_token%}
                             <input type="hidden" name="method" value="DELETE">
                             <button type="submit" class="btn btn-danger">
                                 Eliminar
                             </button>
                         </form>
+                        <!--<script>
+
+                            $(function(){
+                                'use strict';
+                                $('#eliminarUsuario-{{x.id}}').on('submit', function(){
+                                    console.log("pulsado");
+                                    $.ajax({
+                                        url : $('#modificarUsuario').data('post-url'),
+                                        type : 'POST',
+                                        data : new FormData(this),
+                                        processData : false,
+                                        contentType : false,
+                                    });
+                                    Location.reload();
+
+                                    return false
+                                });
+                            });
+                        </script>-->
                     </td>
                 </tr>
                 {%endfor%}
@@ -187,6 +207,8 @@
                 return false
             });
         });
+
+
     </script>
     {% endblock %}
 
