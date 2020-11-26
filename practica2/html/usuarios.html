@@ -79,6 +79,9 @@
                     <th scope="col">
                         Eliminar
                     </th>
+                    <th scope="col">
+                        Publicaciones
+                    </th>
                 </tr>
 
             </thead>
@@ -143,6 +146,13 @@
                                 });
                             });
                         </script>-->
+                        <td>
+                            <form method="GET" action="usuarios/{{x.id}}/listarPublicaciones">
+                                <button type="submit" class="btn btn-primary">
+                                    Publicaciones
+                                </button>
+                            </form>
+                        </td>
                     </td>
                 </tr>
                 {%endfor%}

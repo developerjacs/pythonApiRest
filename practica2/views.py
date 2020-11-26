@@ -41,6 +41,18 @@ def editarUsuarios(request, pk):
     context = {"user": usuario}
     return render(request, 'editarUsuario.html', context)
 
+def listarPublicaciones(request, pk):
+    usuario = requests.get(
+        "http://localhost:8080/api/usuarios/"+str(pk)).json()
+    publicaciones = requests.get("http://localhost:8080/api/usuarios/" + str(pk) + "/publicaciones").json()
+    context = {"user": usuario, "publicaciones": publicaciones}
+    return render(request, 'listarPublicaciones.html', context)
+
+def editarPublicaciones(request, pk1, pk2):
+    publicacion = requests.get(
+        "http://localhost:8080/api/usuarios/"+str(pk1)+"/publicaciones/"+str(pk2)).json()
+    context = {"publicacion": publicacion}
+    return render(request, 'editarPublicacion.html', context)
 
 def datosAbiertos(request):
     espacios = requests.get("http://localhost:8080/api/poiEAlt").json()

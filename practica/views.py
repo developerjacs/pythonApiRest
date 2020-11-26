@@ -93,7 +93,10 @@ def publicaciones_list(request, pk):
         serializados = PublicacionSerializer(publicaciones, many=True)
         return JsonResponse(serializados.data, safe=False, status=status.HTTP_200_OK)
     elif request.method == 'POST':
-        publicacion = JSONParser().parse(request)
+        try:
+            publicacion = request.POST.dict()  # Caso form
+        except:
+            publicacion = JSONParser().parse(request)  # Caso json
         publicacion['fecha'] = datetime.today().strftime('%Y-%m-%dT%H:%M:%S')
         publicacion['publicador'] = pk
         publicacion_serializada = PublicacionSerializer(data=publicacion)
@@ -113,19 +116,23 @@ def getPublicacionId(request, pk1, pk2):
     if request.method == 'GET':
         publicacion_serializer = PublicacionSerializer(publicacion)
         return JsonResponse(publicacion_serializer.data)
-    elif request.method == 'PUT':
-        publicacion_data = JSONParser().parse(request)
-        publicacion_data['fecha'] = datetime.today().strftime(
-            '%Y-%m-%dT%H:%M:%S')
-        publicacion_serializer = PublicacionSerializer(
-            publicacion, data=publicacion_data)
-        if publicacion_serializer.is_valid():
-            publicacion_serializer.save()
-            return JsonResponse(publicacion_serializer.data)
-        return JsonResponse(publicacion_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == 'DELETE':
-        publicacion.delete()
-        return JsonResponse({'message': 'Publicacion was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
+    elif request.method == 'POST':
+        if request.POST.get('method') == 'PUT':
+            try:
+                publicacion_data = request.POST.dict()  # Caso form
+            except:
+                publicacion_data = JSONParser().parse(request)  # Caso json
+            publicacion_data['fecha'] = datetime.today().strftime(
+                '%Y-%m-%dT%H:%M:%S')
+            publicacion_serializer = PublicacionSerializer(
+                publicacion, data=publicacion_data)
+            if publicacion_serializer.is_valid():
+                publicacion_serializer.save()
+                return JsonResponse(publicacion_serializer.data)
+            return JsonResponse(publicacion_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        elif request.POST.get('method') == 'DELETE':
+            publicacion.delete()
+            return JsonResponse({'message': 'Publicacion was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
 
 # Funciones de Romolo
 
