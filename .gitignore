@@ -1,4 +1,2 @@
-.idea
-practica/__pycache__/
-Practica1/__pycache__/
-Practica/__pycache__/
+.idea/
+*/__pycache__/
