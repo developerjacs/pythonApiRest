@@ -74,7 +74,7 @@
                 </tbody>
             </table>
         </div>
-        
+
         <div class="card" style="margin-top: 20px;">
             <div class="card-header">
                 <h1>Crear Comentario</h1>
@@ -85,18 +85,16 @@
                         {%csrf_token%}
                         <div class="form-group row">
                             <label for="mensaje" class="col-sm-2 col-form-label">Mensaje</label>
-                            <input id="mensaje" type="text" name="mensaje" />
+                            <input id="mensaje" type="text" name="mensaje" required/>
                         </div>
                         <div class="form-group row">
                             <label for="publicador" class="col-sm-2 col-form-label">Publicador</label>
-                            <input id="publicador" type="text" name="publicador" />
+                            <input id="publicador" type="text" name="publicador" required/>
                         </div>
-                        
-                        <input class="btn btn-primary" type="submit" type="button" name="Submit" value="Publicar">
+                        <input class="btn btn-primary" required type="submit" type="button" name="Submit" value="Publicar">
                 </div>
             </div>
         </div>
-
     {% block js %}
     <script>
         $(function(){
