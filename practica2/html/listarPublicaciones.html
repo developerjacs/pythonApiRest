@@ -114,7 +114,7 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <form method="post" id="modificarPublicacion" action="http://localhost:8080/api/usuarios/{{user.id}}/publicaciones">
+                    <form method="post" id="modificarPublicacion" data-post-url="http://localhost:8080/api/usuarios/{{user.id}}/publicaciones">
                         {%csrf_token%}
                         <div class="form-group row">
                             <input id="publicador" type="hidden" name="publicador" value="{{user.id}}" />
@@ -157,7 +157,8 @@
                     processData : false,
                     contentType : false,
                 });
-                window.location.replace("http://localhost:8080/app/usuarios/{{user.id}}/listarPublicaciones");
+                Location.reload();
+                            
                 return false
             });
         });
