@@ -3,12 +3,14 @@ from django.shortcuts import render
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework import status
+
 from practica.models import *
 from practica.serializers import *
 from rest_framework.decorators import api_view
 from datetime import datetime
 import json
 from dateutil.relativedelta import relativedelta
+
 import urllib.request
 import urllib.response
 import requests
@@ -41,9 +43,9 @@ def getUsuarios(request):
         except:
             usuario_data = JSONParser().parse(request)  # Caso json
 
-        usuario_data["fecha_registro"] = datetime.today().strftime('%Y-%m-%d') #Fecha del sistema actual
+        usuario_data["fecha_registro"] = datetime.today().strftime('%Y-%m-%d')
         usuarios_serializer = UsuarioSerializer(data=usuario_data)
-
+        print("llege")
         if usuarios_serializer.is_valid():
             usuarios_serializer.save()
             return JsonResponse(usuarios_serializer.data, status=status.HTTP_201_CREATED)
@@ -75,8 +77,6 @@ def getUsuarioId(request, pk):
             if usuario_serializer.is_valid():
                 usuario_serializer.save()
                 return JsonResponse(usuario_serializer.data)
-            else:
-                print(usuario_serializer.errors)
             return JsonResponse(usuario_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         elif request.POST.get('method') == "DELETE":
             usuario.delete()
@@ -106,14 +106,13 @@ def publicaciones_list(request, pk):
         return JsonResponse(publicacion_serializada.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'PUT', 'DELETE', 'POST'])
+@api_view(['GET', 'PUT', 'DELETE'])
 def getPublicacionId(request, pk1, pk2):
     try:
         publicaciones_del_usuario = Publicacion.objects.filter(publicador=pk1)
         publicacion = publicaciones_del_usuario.get(pk=pk2)
     except Publicacion.DoesNotExist:
         return JsonResponse({'message': 'The publicacion does not exist'}, status=status.HTTP_404_NOT_FOUND)
-
     if request.method == 'GET':
         publicacion_serializer = PublicacionSerializer(publicacion)
         return JsonResponse(publicacion_serializer.data)
@@ -121,22 +120,16 @@ def getPublicacionId(request, pk1, pk2):
         if request.POST.get('method') == 'PUT':
             try:
                 publicacion_data = request.POST.dict()  # Caso form
-                publicacion_data['publicador'] = publicacion.publicador.id      
             except:
                 publicacion_data = JSONParser().parse(request)  # Caso json
-
             publicacion_data['fecha'] = datetime.today().strftime(
                 '%Y-%m-%dT%H:%M:%S')
             publicacion_serializer = PublicacionSerializer(
                 publicacion, data=publicacion_data)
-
             if publicacion_serializer.is_valid():
                 publicacion_serializer.save()
                 return JsonResponse(publicacion_serializer.data)
-            else:
-                print(publicacion_serializer.errors)
-                return JsonResponse(publicacion_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+            return JsonResponse(publicacion_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         elif request.POST.get('method') == 'DELETE':
             publicacion.delete()
             return JsonResponse({'message': 'Publicacion was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
@@ -154,7 +147,10 @@ def comentarios_publicacion(request, pk):
         serializados = ComentarioSerializer(comentarios, many=True)
         return JsonResponse(serializados.data, safe=False, status=status.HTTP_200_OK)
     elif request.method == 'POST':
-        comentario = JSONParser().parse(request)
+        try:
+            comentario = request.POST.dict()  # Caso form
+        except:
+            comentario = JSONParser().parse(request)  # Caso json
         comentario['fecha'] = datetime.today().strftime('%Y-%m-%dT%H:%M:%S')
         comentario['publicacion'] = pk
         print(comentario['publicacion'])
@@ -183,6 +179,67 @@ def publicaciones(request):
             publicacion_serializada.save()
             return JsonResponse(publicacion_serializada.data, status=status.HTTP_201_CREATED)
         return JsonResponse(publicacion_serializada.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Funciones de Noel
+@api_view(['GET', 'POST'])
+def getComentarios(request):
+    if request.method == 'GET':
+        comentarios = Comentario.objects.all()
+        comentarios_serializer = ComentarioSerializer(comentarios, many=True)
+        return JsonResponse(comentarios_serializer.data, safe=False, status=status.HTTP_200_OK)
+
+    elif request.method == 'POST':
+        comentario_data = JSONParser().parse(request)
+        comentario_data["fecha"] = datetime.today().strftime('%Y-%m-%dT%H:%M:%S')
+        comentarios_serializer = ComentarioSerializer(data=comentario_data)
+        if comentarios_serializer.is_valid():
+            comentarios_serializer.save()
+            return JsonResponse(comentarios_serializer.data, status=status.HTTP_201_CREATED)
+        return JsonResponse(comentarios_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def getComentariosID(request, pk):
+    try:
+        comentario = Comentario.objects.get(pk=pk)
+    except Comentario.DoesNotExist:
+        return JsonResponse({'message': 'The comentario does not exist'}, status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        comentario_serializer = ComentarioSerializer(comentario)
+        return JsonResponse(comentario_serializer.data)
+    elif request.method == 'PUT':
+        comentario_data = JSONParser().parse(request)
+        comentario_serializer = ComentarioSerializer(
+            comentario, data=comentario_data)
+        if comentario_serializer.is_valid():
+            comentario_serializer.save()
+            return JsonResponse(comentario_serializer.data)
+        return JsonResponse(comentario_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        comentario.delete()
+        return JsonResponse({'message': 'Comentario was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def getPublicacionesID(request, pk):
+    try:
+        publicacion = Publicacion.objects.get(pk=pk)
+    except Publicacion.DoesNotExist:
+        return JsonResponse({'message': 'The publicacion does not exist'}, status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        publicacion_serializer = PublicacionSerializer(publicacion)
+        return JsonResponse(publicacion_serializer.data)
+    elif request.method == 'PUT':
+        publicacion_data = JSONParser().parse(request)
+        publicacion_serializer = PublicacionSerializer(
+            publicacion, data=publicacion_data)
+        if publicacion_serializer.is_valid():
+            publicacion_serializer.save()
+            return JsonResponse(publicacion_serializer.data)
+        return JsonResponse(publicacion_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        publicacion.delete()
+        return JsonResponse({'message': 'Publicacion was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
+
+
 
 # Funciones de German 
 @api_view(['GET'])

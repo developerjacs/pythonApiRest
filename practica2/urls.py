@@ -8,4 +8,5 @@ urlpatterns = [
     path('app/datosAbiertos', views.datosAbiertos),
     path('app/usuarios/<pk>/listarPublicaciones', views.listarPublicaciones),
     path('app/usuarios/<pk1>/editarPublicacion/<pk2>', views.editarPublicaciones),
+    path('app/publicaciones/<pk>/listarComentarios', views.listarComentarios),
 ]

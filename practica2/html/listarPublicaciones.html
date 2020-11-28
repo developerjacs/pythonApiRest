@@ -97,7 +97,7 @@
                             </form>
                         </td>
                         <td>
-                            <form method="GET" action="listarPublicaciones/{{x.id}}">
+                            <form method="GET" action="http://localhost:8080/app/publicaciones/{{x.id}}/listarComentarios">
                                 <button type="submit" class="btn btn-primary">
                                     Comentarios
                                 </button>
@@ -114,30 +114,30 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <form method="post" id="crearPublicacion" data-post-url="http://localhost:8080/api/usuarios/{{user.id}}/publicaciones">
+                    <form method="post" id="modificarPublicacion" data-post-url="http://localhost:8080/api/usuarios/{{user.id}}/publicaciones">
                         {%csrf_token%}
                         <div class="form-group row">
                             <input id="publicador" type="hidden" name="publicador" value="{{user.id}}" />
                         </div>
                         <div class="form-group row">
                             <label for="nombre" class="col-sm-2 col-form-label">Nombre del Grafiti</label>
-                            <input id="nombre" type="text" name="nombre" />
+                            <input id="nombre" type="text" name="nombre" value="{{publicacion.nombre}}" />
                         </div>
                         <div class="form-group row">
                             <label for="descripcion" class="col-sm-2 col-form-label">Descripcion</label>
-                            <input id="descripcion" type="text" name="descripcion" />
+                            <input id="descripcion" type="text" name="descripcion" value="{{publicacion.descripcion}}" />
                         </div>
                         <div class="form-group row">
                             <label for="graffiti" class="col-sm-2 col-form-label">Graffiti</label>
-                            <input id="graffiti" type="text" name="graffiti" />
+                            <input id="graffiti" type="text" name="graffiti" value="{{publicacion.graffiti}}" />
                         </div>
                         <div class="form-group row">
                             <label for="autor" class="col-sm-2 col-form-label">Autor</label>
-                            <input id="autor" type="text" name="autor" />
+                            <input id="autor" type="text" name="autor" value="{{publicacion.autor}}" />
                         </div>
                         <div class="form-group row">
                             <label for="ubicacion" class="col-sm-2 col-form-label">Ubicacion</label>
-                            <input id="ubicacion" type="text" name="ubicacion" />
+                            <input id="ubicacion" type="text" name="ubicacion" value="{{publicacion.ubicacion}}" />
                         </div>
                         <input class="btn btn-primary" type="submit" type="button" name="Submit" value="Publicar">
                 </div>
@@ -148,10 +148,10 @@
     <script>
         $(function(){
             'use strict';
-            $('#crearPublicacion').on('submit', function(){
+            $('#modificarPublicacion').on('submit', function(){
                 console.log("pulsado");
                 $.ajax({
-                    url : $('#crearPublicacion').data('post-url'),
+                    url : $('#modificarPublicacion').data('post-url'),
                     type : 'POST',
                     data : new FormData(this),
                     processData : false,
