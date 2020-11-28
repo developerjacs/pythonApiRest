@@ -161,7 +161,7 @@
                     processData : false,
                     contentType : false,
                 });
-                Location.reload();
+                window.location.replace("http://localhost:8080/app/usuarios/{{user.id}}/listarPublicaciones");
                 return false
             });
         });
