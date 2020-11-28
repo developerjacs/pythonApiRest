@@ -12,11 +12,11 @@
 <body>
     <div class="card">
         <div class="card-header">
-            <h1>Editar Publicacion {{publicacion.nombre}}</h1>
+            <h1>Editar Publicacion {{publicacion.nombre}} del autor {{publicacion.publicador}}</h1>
         </div>
         <div class="card-body">
             <div class="form-group">
-                <form method="post" id="modificarPublicacion" data-post-url="http://localhost:8080/api/usuarios/{{user.id}}/publicaciones/{{publicacion.id}}">
+                <form method="post" id="modificarPublicacion" data-post-url="http://localhost:8080/api/usuarios/{{publicacion.publicador}}/publicaciones/{{publicacion.id}}">
                     {%csrf_token%}
                     <input type="hidden" name="method" value="PUT">
                     <div class="form-group row">
