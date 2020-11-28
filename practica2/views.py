@@ -65,3 +65,9 @@ def modificarComentario(request, pk1, pk2, pk3):
     publicador = request.get("http://localhost:8080/api/usuarios/" + str(pk1)).json()
     context = {"comentario": comentario, "publicacion": publicacion, "publicador": publicador}
     return render(request, 'editarComentario.html', context)
+    
+def listarComentarios(request, pk): 
+    comentarios = requests.get("http://localhost:8080/api/publicaciones/"+str(pk)+"/comentarios").json()
+    publicacion = requests.get("http://localhost:8080/api/publicaciones/"+str(pk)).json()
+    context = {"comentarios" : comentarios, "publicacion" : publicacion}
+    return render(request, 'listarComentarios.html', context)
