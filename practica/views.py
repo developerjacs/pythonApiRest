@@ -77,6 +77,8 @@ def getUsuarioId(request, pk):
             if usuario_serializer.is_valid():
                 usuario_serializer.save()
                 return JsonResponse(usuario_serializer.data)
+            else:
+                print(usuario_serializer.errors)
             return JsonResponse(usuario_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         elif request.POST.get('method') == "DELETE":
             usuario.delete()
@@ -106,7 +108,7 @@ def publicaciones_list(request, pk):
         return JsonResponse(publicacion_serializada.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'PUT', 'DELETE', 'POST'])
 def getPublicacionId(request, pk1, pk2):
     try:
         publicaciones_del_usuario = Publicacion.objects.filter(publicador=pk1)
@@ -120,8 +122,11 @@ def getPublicacionId(request, pk1, pk2):
         if request.POST.get('method') == 'PUT':
             try:
                 publicacion_data = request.POST.dict()  # Caso form
+                publicacion_data['publicador'] = publicacion.publicador.id
+                print(publicacion_data)
             except:
                 publicacion_data = JSONParser().parse(request)  # Caso json
+
             publicacion_data['fecha'] = datetime.today().strftime(
                 '%Y-%m-%dT%H:%M:%S')
             publicacion_serializer = PublicacionSerializer(
@@ -129,7 +134,9 @@ def getPublicacionId(request, pk1, pk2):
             if publicacion_serializer.is_valid():
                 publicacion_serializer.save()
                 return JsonResponse(publicacion_serializer.data)
-            return JsonResponse(publicacion_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                print(publicacion_serializer.errors)
+                return JsonResponse(publicacion_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         elif request.POST.get('method') == 'DELETE':
             publicacion.delete()
             return JsonResponse({'message': 'Publicacion was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
