@@ -58,3 +58,10 @@ def datosAbiertos(request):
     espacios = requests.get("http://localhost:8080/api/poiEAlt").json()
     context = {"espacios": espacios}
     return render(request, 'datosAbiertos.html', context)
+
+def modificarComentario(request, pk1, pk2, pk3):
+    comentario = request.get("http://localhost:8080/api/usuarios/" + str(pk1) + "/publicaciones/" + str(pk2) + "/comentarios/" + str(pk3)).json()
+    publicacion = request.get("http://localhost:8080/api/usuarios/" + str(pk1) + "/publicaciones/" + str(pk2)).json()
+    publicador = request.get("http://localhost:8080/api/usuarios/" + str(pk1)).json()
+    context = {"comentario": comentario, "publicacion": publicacion, "publicador": publicador}
+    return render(request, 'editarComentario.html', context)
