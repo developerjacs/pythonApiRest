@@ -197,7 +197,7 @@ def getComentarios(request):
             return JsonResponse(comentarios_serializer.data, status=status.HTTP_201_CREATED)
         return JsonResponse(comentarios_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'PUT', 'DELETE','POST'])
 def getComentariosID(request, pk):
     try:
         comentario = Comentario.objects.get(pk=pk)
@@ -206,17 +206,21 @@ def getComentariosID(request, pk):
     if request.method == 'GET':
         comentario_serializer = ComentarioSerializer(comentario)
         return JsonResponse(comentario_serializer.data)
-    elif request.method == 'PUT':
-        comentario_data = JSONParser().parse(request)
-        comentario_serializer = ComentarioSerializer(
-            comentario, data=comentario_data)
-        if comentario_serializer.is_valid():
-            comentario_serializer.save()
-            return JsonResponse(comentario_serializer.data)
-        return JsonResponse(comentario_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == 'DELETE':
-        comentario.delete()
-        return JsonResponse({'message': 'Comentario was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
+    elif request.method == 'POST':
+        if request.POST.get('method') == 'PUT':
+            try:
+                comentario_data = request.POST.dict()  # Caso form
+            except:
+                comentario_data = JSONParser().parse(request)  # Caso json
+            comentario_serializer = ComentarioSerializer(
+                comentario, data=comentario_data)
+            if comentario_serializer.is_valid():
+                comentario_serializer.save()
+                return JsonResponse(comentario_serializer.data)
+            return JsonResponse(comentario_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        elif request.POST.get('method') == 'DELETE':
+            comentario.delete()
+            return JsonResponse({'message': 'Comentario was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def getPublicacionesID(request, pk):

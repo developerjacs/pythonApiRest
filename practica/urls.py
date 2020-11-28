@@ -16,5 +16,6 @@ urlpatterns = [
     path('api/poiCCul/id/<id>', views.getPOIbyIdCentrosCulturales),
     path('api/poiCCul/nombre/<title>', views.getPOIbyTitleCentrosCulturales),
     path('api/comentarios', views.getComentarios),
-    path('api/publicaciones/<pk>', views.getPublicacionesID)
+    path('api/comentarios/<pk>', views.getComentariosID),
+    path('api/publicaciones/<pk>', views.getPublicacionesID),
 ]
