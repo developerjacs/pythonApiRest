@@ -43,9 +43,9 @@ def getUsuarios(request):
         except:
             usuario_data = JSONParser().parse(request)  # Caso json
 
-        usuario_data["fecha_registro"] = datetime.today().strftime('%Y-%m-%d')
+        usuario_data["fecha_registro"] = datetime.today().strftime('%Y-%m-%d') #Fecha del sistema actual
         usuarios_serializer = UsuarioSerializer(data=usuario_data)
-        print("llege")
+
         if usuarios_serializer.is_valid():
             usuarios_serializer.save()
             return JsonResponse(usuarios_serializer.data, status=status.HTTP_201_CREATED)
@@ -115,6 +115,7 @@ def getPublicacionId(request, pk1, pk2):
         publicacion = publicaciones_del_usuario.get(pk=pk2)
     except Publicacion.DoesNotExist:
         return JsonResponse({'message': 'The publicacion does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
     if request.method == 'GET':
         publicacion_serializer = PublicacionSerializer(publicacion)
         return JsonResponse(publicacion_serializer.data)
@@ -122,8 +123,7 @@ def getPublicacionId(request, pk1, pk2):
         if request.POST.get('method') == 'PUT':
             try:
                 publicacion_data = request.POST.dict()  # Caso form
-                publicacion_data['publicador'] = publicacion.publicador.id
-                print(publicacion_data)
+                publicacion_data['publicador'] = publicacion.publicador.id      
             except:
                 publicacion_data = JSONParser().parse(request)  # Caso json
 
@@ -131,12 +131,14 @@ def getPublicacionId(request, pk1, pk2):
                 '%Y-%m-%dT%H:%M:%S')
             publicacion_serializer = PublicacionSerializer(
                 publicacion, data=publicacion_data)
+
             if publicacion_serializer.is_valid():
                 publicacion_serializer.save()
                 return JsonResponse(publicacion_serializer.data)
             else:
                 print(publicacion_serializer.errors)
                 return JsonResponse(publicacion_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         elif request.POST.get('method') == 'DELETE':
             publicacion.delete()
             return JsonResponse({'message': 'Publicacion was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
