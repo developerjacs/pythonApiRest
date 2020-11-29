@@ -89,12 +89,32 @@
                             </form>
                         </td>
                         <td>
-                            <form method="POST" action="http://localhost:8080/api/usuarios/{{user.id}}/publicaciones/{{x.id}}">
+                            <form method="POST" id="eliminarPublicacion-{{x.id}}" data-post-url="http://localhost:8080/api/usuarios/{{user.id}}/publicaciones/{{x.id}}">
+                                {%csrf_token%}
                                 <input type="hidden" name="method" value="DELETE">
                                 <button type="submit" class="btn btn-danger">
                                     Eliminar
                                 </button>
                             </form>
+                            <script>
+
+                                $(function(){
+                                    'use strict';
+                                    $('#eliminarPublicacion-{{x.id}}').on('submit', function(){
+                                        console.log("pulsado eliminar publicacion {{x.id}}");
+                                        $.ajax({
+                                            url : $('#eliminarPublicacion-{{x.id}}').data('post-url'),
+                                            type : 'POST',
+                                            data : new FormData(this),
+                                            processData : false,
+                                            contentType : false,
+                                        });
+                                        location.reload();
+    
+                                        return false
+                                    });
+                                });
+                            </script>
                         </td>
                         <td>
                             <form method="GET" action="http://localhost:8080/app/publicaciones/{{x.id}}/listarComentarios">
