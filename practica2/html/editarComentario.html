@@ -21,7 +21,7 @@
                         <input type="hidden" name="method" value="PUT">
                         <div class="form-group row">
                             <label for="mensaje" class="col-sm-2 col-form-label">Mensaje del Comentario</label> 
-                            <input id="mensaje"  type="text" name="mensaje" value="{{comentario.mensaje}}" />
+                            <input id="mensaje"  type="text" name="mensaje" value="{{comentario.mensaje}}" required/>
                         </div>
                         <div class="form-group row">
                             <input id="publicador" type="hidden" name="publicador" value={{comentario.publicador}} />

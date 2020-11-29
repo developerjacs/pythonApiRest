@@ -137,11 +137,11 @@
                     <form method="post" id="crearPublicacion" data-post-url="http://localhost:8080/api/usuarios/{{user.id}}/publicaciones">
                         {%csrf_token%}
                         <div class="form-group row">
-                            <input id="publicador" type="hidden" name="publicador" value="{{user.id}}" />
+                            <input id="publicador" type="hidden" name="publicador" value="{{user.id}}" required/>
                         </div>
                         <div class="form-group row">
                             <label for="nombre" class="col-sm-2 col-form-label">Nombre del Grafiti</label>
-                            <input id="nombre" type="text" name="nombre" />
+                            <input id="nombre" type="text" name="nombre" required/>
                         </div>
                         <div class="form-group row">
                             <label for="descripcion" class="col-sm-2 col-form-label">Descripcion</label>
@@ -149,15 +149,15 @@
                         </div>
                         <div class="form-group row">
                             <label for="graffiti" class="col-sm-2 col-form-label">Graffiti</label>
-                            <input id="graffiti" type="text" name="graffiti" />
+                            <input id="graffiti" type="text" name="graffiti" required/>
                         </div>
                         <div class="form-group row">
                             <label for="autor" class="col-sm-2 col-form-label">Autor</label>
-                            <input id="autor" type="text" name="autor" />
+                            <input id="autor" type="text" name="autor" required/>
                         </div>
                         <div class="form-group row">
                             <label for="ubicacion" class="col-sm-2 col-form-label">Ubicacion</label>
-                            <input id="ubicacion" type="text" name="ubicacion" />
+                            <input id="ubicacion" type="text" name="ubicacion" required/>
                         </div>
                         <input class="btn btn-primary" type="submit" type="button" name="Submit" value="Publicar">
                 </div>

@@ -21,28 +21,28 @@
                     <input type="hidden" name="method" value="PUT">
                     <div class="form-group row">
                         <label for="nombre_usuario" class="col-sm-2 col-form-label">Nombre de Usuario</label>
-                        <input id="nombre_usuario" type="text" name="nombre_usuario" value="{{user.nombre_usuario}}"/>
+                        <input id="nombre_usuario" type="text" name="nombre_usuario" value="{{user.nombre_usuario}}" required/>
                     </div>
                     <div class="form-group row">
                         <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
-                        <input id="nombre" type="text" name="nombre" value="{{user.nombre}}"/>
+                        <input id="nombre" type="text" name="nombre" value="{{user.nombre}}" required/>
                     </div>
                     <div class="form-group row">
                         <label for="apellido1" class="col-sm-2 col-form-label">Apellido1</label>
-                        <input id="apellido1" type="text" name="apellido1" value="{{user.apellido1}}"/>
+                        <input id="apellido1" type="text" name="apellido1" value="{{user.apellido1}}" required/>
                     </div>
                     <div class="form-group row">
                         <label for="apellido2" class="col-sm-2 col-form-label">Apellido2</label>
-                        <input id="apellido2" type="text" name="apellido2" value="{{user.apellido2}}"/>
+                        <input id="apellido2" type="text" name="apellido2" value="{{user.apellido2}}" required/>
                     </div>
                     <div class="form-group row">
                         <label for="fecha_nacimiento" class="col-sm-2 col-form-label">Fecha de Nacimiento</label>
-                        <input id="fecha_nacimiento" type="text" name="fecha_nacimiento" value="{{user.fecha_nacimiento}}"/>
+                        <input id="fecha_nacimiento" type="date" name="fecha_nacimiento" value="{{user.fecha_nacimiento}}" required/>
                     </div>
-                    <div class="form-group row">
+                    <!--<div class="form-group row">
                         <label for="fecha_registro" class="col-sm-2 col-form-label">Fecha de Registro</label>
-                        <input id="fecha_registro" type="text" name="fecha_registro" value="{{user.fecha_registro}}"/>
-                    </div>
+                        <input id="fecha_registro" type="text" name="fecha_registro" value="{{user.fecha_registro}}" required/>
+                    </div>-->
                     <input class="btn btn-primary" type="submit" type="button" name="Submit" value="Actualizar">
             </div>
         </div>
