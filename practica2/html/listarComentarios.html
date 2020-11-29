@@ -56,18 +56,40 @@
                         </td>
                         <td>
                             <form method="GET" action="http://localhost:8080/app/editarComentario/{{x.id}}">
+                            {%csrf_token%}
                                 <button type="submit" class="btn btn-primary">
                                     Actualizar
                                 </button>
                             </form>
+
                         </td>
                         <td>
-                            <form method="POST" action="http://localhost:8080/api/comentarios/{{x.id}}">
+                            <form method="POST" id="borrarComentario-{{x.id}}" data-post-url="http://localhost:8080/api/comentarios/{{x.id}}">
                                 <input type="hidden" name="method" value="DELETE">
                                 <button type="submit" class="btn btn-danger">
                                     Eliminar
                                 </button>
+
                             </form>
+                            <script>
+
+                                $(function(){
+                                    'use strict';
+                                    $('#borrarComentario-{{x.id}}').on('submit', function(){
+                                        console.log("pulsado eliminar usuario {{x.id}}");
+                                        $.ajax({
+                                            url : $('#borrarComentario-{{x.id}}').data('post-url'),
+                                            type : 'POST',
+                                            data : new FormData(this),
+                                            processData : false,
+                                            contentType : false,
+                                        });
+                                        location.reload();
+
+                                        return false
+                                    });
+                                });
+                            </script>
                         </td>
                     </tr>
                     {%endfor%}
